@@ -92,35 +92,6 @@ project/
 
 ## Setup & Installation
 
----
-
-## Tech Stack
-
-| Tool | Version | Purpose |
-|---|---|---|
-| **Python** | 3.11 | Core language |
-| **Ollama** | Latest | Runs AI models locally |
-| **Llama3** | Latest | LLM that reads and answers |
-| **nomic-embed-text** | Latest | Converts text to vectors |
-| **ChromaDB** | Latest | Stores and searches vectors |
-| **LangChain** | Latest | Connects all components |
-| **FastAPI** | Latest | REST API framework |
-| **Uvicorn** | Latest | ASGI server |
-
----
-
-## Prerequisites
-
-- Python 3.10 or higher
-- Ollama installed → [Download here](https://ollama.com)
-- Git installed
-- 8GB RAM minimum (16GB recommended)
-- 10GB free disk space
-
----
-
-## Setup & Installation
-
 ### Step 1 — Clone the repository
 ```bash
 git clone https://github.com/mansi084/RAG-POC-with-Ollama
