@@ -51,8 +51,8 @@ class RAGService():
 
     def ask(self, question:str):
         # Step 1 - Create retriever
-        retriever = self.vectorstore.as_retriever(
-            search_kwargs={"k": 3}
+        retriever = self.vectorstore.as_retriever( #as_retriever() converts the vector store into a Retriever object.
+            search_kwargs={"k": 3} #search_kwargs={"k": 3} is a Python dictionary passed as an argument to configure how the retriever performs the search.
         )
 
         # Step 2 - Create prompt template
@@ -64,11 +64,11 @@ class RAGService():
         """)
 
         # Step 3 - Build chain
-        chain = (
-            {"context": retriever, "question": RunnablePassthrough()}
-            | prompt
-            | self.llm
-            | StrOutputParser()
+        chain = ( #A chain is a sequence of operations.
+            {"context": retriever, "question": RunnablePassthrough()} #Receives the question and searches the vector database.
+            | prompt #Simply passes the input unchanged.
+            | self.llm #The prompt is sent to your LLM
+            | StrOutputParser() #StrOutputParser() is a LangChain component that converts the LLM's output into a plain Python string.
         )
 
         # Step 4 - Return answer

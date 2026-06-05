@@ -19,7 +19,7 @@ calls vectorstore_factory → connects to ChromaDB
       ↓
 creates text splitter with chunk_size=500
       ↓
-Server is ready! ✅
+Server is ready! 
 
 
 
@@ -40,7 +40,7 @@ nomic-embed-text converts each chunk to vectors (768 numbers)
       ↓
 ChromaDB saves all vectors to ./my_database folder
       ↓
-returns "Successfully trained on X chunks!" ✅
+returns "Successfully trained on X chunks!" 
 
 
 
@@ -65,7 +65,7 @@ llama3 reads context and generates answer
       ↓
 StrOutputParser converts to clean text
       ↓
-answer returned to user ✅
+answer returned to user 
 
 
 
@@ -85,8 +85,7 @@ document_loader.py
 (reads PDF/TXT/DOCX)
     ↓
 app.py (front door)
-(receives requests
- from outside world)
+(receives requests from outside world)
 
 
 

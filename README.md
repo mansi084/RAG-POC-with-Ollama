@@ -1,60 +1,54 @@
 # RAG POC with Ollama
 
-A simple Retrieval-Augmented Generation (RAG) Proof of Concept that uses local documents and a local LLM running through Ollama to answer user queries.
+> Ask questions from your own documents — privately, freely, and fully offline.
 
-# Overview
+No ChatGPT. No API keys. No data leaving your machine.
+Just upload a document, ask a question, get an answer.
 
-This project demonstrates a basic RAG pipeline:
+---
 
-1. Load documents (PDF, DOCX, TXT)
-2. Split documents into chunks
-3. Generate embeddings
-4. Store embeddings in a vector database
-5. Retrieve relevant chunks for a user query
-6. Send retrieved context to an Ollama model
-7. Generate an answer
+## What is this?
 
-# Architecture
+A **Proof of Concept** for a **RAG (Retrieval Augmented Generation)** system that:
 
-User Query
-    ↓
-Retriever
-    ↓
-Vector Database
-    ↓
-Relevant Chunks
-    ↓
-Ollama LLM
-    ↓
-Generated Answer
+1. Takes your documents (PDF, TXT, DOCX)
+2. Splits them into chunks
+3. Converts chunks into vectors (embeddings)
+4. Stores vectors locally in ChromaDB
+5. When you ask a question — finds the most relevant chunks
+6. Sends those chunks as context to a local LLM
+7. Returns an accurate answer based on YOUR documents
 
+---
 
-Documents
-   ↓
-Chunking
-   ↓
-Embeddings
-   ↓
-Vector DB
-   ↓
-Retriever
-   ↓
-Ollama
-   ↓
-Answer
+## Architecture
+
+TRAINING FLOW:
+Your Document
+↓
+Document Loader (PDF / TXT / DOCX)
+↓
+Text Splitter (chunks of 500 chars)
+↓
+nomic-embed-text (converts to vectors)
+↓
+ChromaDB (saves vectors locally)
 
 
-# Tech Stack
+QUERY FLOW:
+User asks a Question
+↓
+nomic-embed-text (converts question to vector)
+↓
+ChromaDB (finds top 3 similar chunks)
+↓
+Llama3 via Ollama (reads chunks + generates answer)
+↓
+Answer returned to user
 
-- Python 3.11
-- Ollama
-- LangChain
-- ChromaDB
-- Sentence Transformers
-- Streamlit (optional UI)
+---
 
-
-# Project Structure
+## Project Structure
 
 project/
 ├── config.yaml                  → all settings
@@ -69,45 +63,212 @@ project/
 ├── documents/                   → drop your files here
 └── my_database/                 → ChromaDB saves here
 
+---
 
-# Prerequisites
+## Tech Stack
 
-- Python 3.10+
-- Ollama installed
-- Git
+| Tool | Version | Purpose |
+|---|---|---|
+| **Python** | 3.11 | Core language |
+| **Ollama** | Latest | Runs AI models locally |
+| **Llama3** | Latest | LLM that reads and answers |
+| **nomic-embed-text** | Latest | Converts text to vectors |
+| **ChromaDB** | Latest | Stores and searches vectors |
+| **LangChain** | Latest | Connects all components |
+| **FastAPI** | Latest | REST API framework |
+| **Uvicorn** | Latest | ASGI server |
 
+---
 
-# Pull Ollama Model
+## Prerequisites
 
+- Python 3.10 or higher
+- Ollama installed → [Download here](https://ollama.com)
+- Git installed
+- 8GB RAM minimum (16GB recommended)
+- 10GB free disk space
+
+---
+
+## Setup & Installation
+
+---
+
+## Tech Stack
+
+| Tool | Version | Purpose |
+|---|---|---|
+| **Python** | 3.11 | Core language |
+| **Ollama** | Latest | Runs AI models locally |
+| **Llama3** | Latest | LLM that reads and answers |
+| **nomic-embed-text** | Latest | Converts text to vectors |
+| **ChromaDB** | Latest | Stores and searches vectors |
+| **LangChain** | Latest | Connects all components |
+| **FastAPI** | Latest | REST API framework |
+| **Uvicorn** | Latest | ASGI server |
+
+---
+
+## Prerequisites
+
+- Python 3.10 or higher
+- Ollama installed → [Download here](https://ollama.com)
+- Git installed
+- 8GB RAM minimum (16GB recommended)
+- 10GB free disk space
+
+---
+
+## Setup & Installation
+
+### Step 1 — Clone the repository
+```bash
+git clone https://github.com/mansi084/RAG-POC-with-Ollama
+cd RAG-POC-with-Ollama
+```
+
+### Step 2 — Create virtual environment
+```bash
+# Windows
+python -m venv venv
+venv\Scripts\activate
+
+# Mac/Linux
+python -m venv venv
+source venv/bin/activate
+```
+
+### Step 3 — Install dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### Step 4 — Pull Ollama models
+```bash
+# Pull the LLM
 ollama pull llama3
 
+# Pull the embedding model
+ollama pull nomic-embed-text
+```
 
-# Installation
+### Step 5 — Start the server
+```bash
+uvicorn app:app --reload
+```
 
-Clone repository
-git clone <repository-url>
-cd project
-Install dependencies
-pip install -r requirements.txt
+### Step 6 — Open API docs in browser
+http://127.0.0.1:8000/docs
+
+---
+
+## API Endpoints
+
+### Upload a Document
+POST /upload
+Accepts: PDF, TXT, DOCX
+
+Example using Swagger UI:
+- Go to `http://127.0.0.1:8000/docs`
+- Click `POST /upload`
+- Click `Try it out`
+- Choose your file
+- Click `Execute`
+
+Response:
+```json
+{
+  "message": "Successfully trained on 12 chunks!"
+}
+```
+
+---
+
+### Ask a Question
+POST /ask
+Example request:
+```json
+{
+  "question": "What is the leave policy?"
+}
+```
+
+Example response:
+```json
+{
+  "answer": "According to the policy, every employee gets 20 paid leaves per year."
+}
+```
+
+---
+
+## Configuration
+
+Everything is controlled from `config.yaml`:
+
+```yaml
+llm:
+  provider: ollama
+  model: llama3          
+
+embedding:
+  provider: ollama
+  model: nomic-embed-text
+
+vectorstore:
+  provider: chroma
+  path: ./my_database
+
+chunking:
+  chunk_size: 500
+  chunk_overlap: 50
+```
+
+### Swap models in seconds — no code changes needed!
+```yaml
+# Want Mistral instead of Llama3?
+llm:
+  model: mistral   ← just change this one line!
+```
+
+---
+
+##  Supported File Types
+
+PDF
+Word Document
+Plain Text 
+
+---
+
+## Features
+
+- 100% local — no internet needed
+- Free — no API costs
+- Private — data never leaves your PC
+- Pluggable — swap models via config
+- Semantic search — finds meaning not just keywords
+- Supports PDF, TXT, DOCX
+- REST API powered by FastAPI
+- Auto-generated API docs at `/docs`
+- ChromaDB persists data between restarts
+
+---
+
+## Privacy
+
+-  All processing happens on your machine
+-  No data sent to any external server
+-  Works completely offline
+-  Your documents never leave your PC
+
+---
 
 
-# Run
-
-Step 1: Start Ollama
-ollama serve
-Step 2: Create Vector Database
-python src/ingest.py
-Step 3: Run Application
-python app.py
 
 
-# Features
 
-- Local LLM using Ollama
-- No external API dependency
-- Semantic search
-- Document-based Q&A
-- Easy to extend
+
 
 
 

@@ -12,3 +12,4 @@ def get_vectorstore(config, embedding): #Because ChromaDB needs an embedding mod
 
     else:
         raise ValueError(f"Unsupported vectorstore provider: {provider}")
+    
