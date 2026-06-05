@@ -1,0 +1,21 @@
+llm:
+  provider: ollama
+  model: llama3
+
+embedding:
+  provider: ollama
+  model: nomic-embed-text
+
+vectorstore:
+  provider: chroma
+  path: ./my_database
+
+chunking:
+  chunk_size: 500
+  chunk_overlap: 50
+
+loader:
+  supported_types:
+    - pdf
+    - txt
+    - docx

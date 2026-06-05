@@ -1,0 +1,102 @@
+User uploads document → train it → User asks question → get answer
+
+
+
+Part 1 — When Server Starts Up
+app.py starts
+      ↓
+creates RAGService object
+      ↓
+RAGService.__init__() runs
+      ↓
+opens config.yaml → reads all settings
+      ↓
+calls embedding_factory → creates nomic-embed-text
+      ↓
+calls llm_factory → creates llama3
+      ↓
+calls vectorstore_factory → connects to ChromaDB
+      ↓
+creates text splitter with chunk_size=500
+      ↓
+Server is ready! ✅
+
+
+
+Part 2 — When User Uploads a Document
+User sends PDF to → POST /upload
+      ↓
+app.py receives the file
+      ↓
+calls rag_service.train("file.pdf")
+      ↓
+document_loader checks extension → ".pdf"
+      ↓
+PyPDFLoader reads and extracts text
+      ↓
+RecursiveCharacterTextSplitter cuts into chunks of 500 chars
+      ↓
+nomic-embed-text converts each chunk to vectors (768 numbers)
+      ↓
+ChromaDB saves all vectors to ./my_database folder
+      ↓
+returns "Successfully trained on X chunks!" ✅
+
+
+
+Part 3 — When User Asks a Question
+User sends "What is the leave policy?" to → POST /ask
+      ↓
+app.py receives the question
+      ↓
+calls rag_service.ask("What is the leave policy?")
+      ↓
+retriever converts question to vector using nomic-embed-text
+      ↓
+ChromaDB searches for top 3 similar chunks
+      ↓
+found chunks passed as {context} into prompt template
+      ↓
+question passed as {question} into prompt template
+      ↓
+filled prompt sent to llama3
+      ↓
+llama3 reads context and generates answer
+      ↓
+StrOutputParser converts to clean text
+      ↓
+answer returned to user ✅
+
+
+
+How all files connect:
+config.yaml
+(settings)
+    ↓
+rag_service.py (brain of the project)
+    ↓           ↓           ↓
+embedding_    llm_      vectorstore_
+factory.py   factory.py  factory.py
+(picks        (picks      (picks
+embedding)    LLM)        vector DB)
+    ↓
+loaders/
+document_loader.py
+(reads PDF/TXT/DOCX)
+    ↓
+app.py (front door)
+(receives requests
+ from outside world)
+
+
+
+One line per file:
+config.yaml - All settings in one place
+rag_service.py - Brain — connects everything
+embedding_factory.py - Creates the right embedding model
+llm_factory.py - Creates the right LLM
+vectorstore_factory.py - Creates the right vector DB
+document_loader.py - Reads and extracts text from files
+app.py - Front door — receives requests
+
+

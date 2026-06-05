@@ -1,0 +1,27 @@
+Company Name: TechCorp India
+
+Leave Policy:
+- Every employee gets 20 paid leaves per year.
+- Sick leaves are 10 days per year.
+- Casual leaves are 5 days per year.
+- Leaves can be carried forward to next year up to 10 days.
+
+Work From Home Policy:
+- Employees can work from home on Fridays.
+- Work from home requires manager approval.
+- Maximum 2 days work from home per week.
+
+Office Timings:
+- Office hours are 9 AM to 6 PM.
+- Flexible timing allowed between 8 AM to 10 AM login.
+- Lunch break is 1 PM to 2 PM.
+
+Salary Policy:
+- Salaries are credited on 1st of every month.
+- Bonus is given twice a year in June and December.
+- Increment cycle is every April.
+
+Probation Policy:
+- New employees have 3 months probation period.
+- No leaves allowed during probation.
+- Performance review at end of probation.
